@@ -15,7 +15,7 @@ describe("setNewOffset", () => {
     const mouseMoveDir = { x: -20, y: -30 };
     const result = setNewOffset(mockCard, mouseMoveDir);
 
-    expect(result).toEqual({ x: 70, y: 80 }); // Expected offsets
+    expect(result).toEqual({ x: 70, y: 80 });
   });
 
   test("should prevent the card from going out of the left/top bounds", () => {
