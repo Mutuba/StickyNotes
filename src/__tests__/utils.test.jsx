@@ -1,5 +1,6 @@
 import { describe, test, expect } from "vitest";
 import { setNewOffset, autoGrow } from "../utils";
+
 describe("setNewOffset", () => {
   test("should return the correct offset within the viewport boundaries", () => {
     const mockCard = {
