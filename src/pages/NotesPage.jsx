@@ -1,11 +1,21 @@
-import { fakeData as notes } from "../assets/fakeData.js";
+import { useState, useEffect } from "react";
+import { db } from "../appwrite/databases";
 import NoteCard from "../components/NoteCard";
 
 const NotesPage = () => {
+  const [notes, setNotes] = useState([]);
+  useEffect(() => {
+    fetchNotes();
+  }, []);
+
+  const fetchNotes = async () => {
+    const response = await db.notes.list();
+    setNotes(response.documents);
+  };
   return (
     <div>
       {notes.map((note) => (
-        <NoteCard note={note} key={note.$id} />
+        <NoteCard note={note} key={note.$id} setNotes={setNotes} />
       ))}
     </div>
   );

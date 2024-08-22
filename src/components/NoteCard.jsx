@@ -1,31 +1,63 @@
 import { useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import Trash from "../icons/Trash";
-import { setNewOffset, autoGrow, setZIndex } from "../utils";
+// import Trash from "../icons/Trash";
+import DeleteButton from "./DeleteButton";
+import { setNewOffset, autoGrow, setZIndex, bodyParser } from "../utils";
+import { db } from "../appwrite/databases";
+import Spinner from "../icons/Spinner";
 
-const NoteCard = ({ note }) => {
+const NoteCard = ({ note, setNotes }) => {
+  const [saving, setSaving] = useState(false);
+
   const [position, setPosition] = useState(JSON.parse(note.position));
   const colors = JSON.parse(note.colors);
-  const body = JSON.parse(note.body);
+  const body = bodyParser(note.body);
   const textAreaRef = useRef(null);
   let mouseStartPos = { x: 0, y: 0 };
   const cardRef = useRef(null);
+  const keyUpTimer = useRef(null);
+
+  const handleKeyUp = async () => {
+    setSaving(true);
+
+    if (keyUpTimer.current) {
+      clearTimeout(keyUpTimer.current);
+    }
+
+    keyUpTimer.current = setTimeout(() => {
+      saveData("body", textAreaRef.current.value);
+    }, 2000);
+  };
 
   useEffect(() => {
     autoGrow(textAreaRef);
   }, []);
 
   const mouseDown = (e) => {
-    setZIndex(cardRef.current);
-    mouseStartPos.x = e.clientX;
-    mouseStartPos.y = e.clientY;
-    document.addEventListener("mousemove", mouseMove);
-    document.addEventListener("mouseup", mouseUp);
+    if (e.target.className === "card-header") {
+      setZIndex(cardRef.current);
+      mouseStartPos.x = e.clientX;
+      mouseStartPos.y = e.clientY;
+      document.addEventListener("mousemove", mouseMove);
+      document.addEventListener("mouseup", mouseUp);
+    }
+  };
+
+  const saveData = async (key, value) => {
+    const payload = { [key]: JSON.stringify(value) };
+    try {
+      await db.notes.update(note.$id, payload);
+    } catch (error) {
+      console.error(error);
+    }
+    setSaving(false);
   };
 
   const mouseUp = () => {
     document.removeEventListener("mousemove", mouseMove);
     document.removeEventListener("mouseup", mouseUp);
+    const newPosition = setNewOffset(cardRef.current);
+    saveData("position", newPosition);
   };
 
   const mouseMove = (e) => {
@@ -57,11 +89,20 @@ const NoteCard = ({ note }) => {
         onMouseDown={mouseDown}
         style={{ backgroundColor: colors.colorHeader }}
       >
-        <Trash />
+        <DeleteButton noteId={note.$id} setNotes={setNotes} />
+
+        {saving && (
+          <div className="card-saving">
+            <Spinner color={colors.colorText} />
+
+            <span style={{ color: colors.colorText }}>Saving...</span>
+          </div>
+        )}
       </div>
 
       <div className="card-body">
         <textarea
+          onKeyUp={handleKeyUp}
           onFocus={() => {
             setZIndex(cardRef.current);
           }}
@@ -78,7 +119,9 @@ const NoteCard = ({ note }) => {
 };
 
 NoteCard.propTypes = {
+  setNotes: PropTypes.func.isRequired,
   note: PropTypes.shape({
+    $id: PropTypes.string.isRequired,
     body: PropTypes.string.isRequired,
     position: PropTypes.string.isRequired,
     colors: PropTypes.string.isRequired,
