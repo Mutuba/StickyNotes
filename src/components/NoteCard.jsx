@@ -4,9 +4,9 @@ import Trash from "../icons/Trash";
 import { setNewOffset, autoGrow } from "../utils";
 
 const NoteCard = ({ note }) => {
-  const [position, setPosition] = useState(JSON.parse(note.position));
-  const colors = JSON.parse(note.colors);
-  const body = JSON.parse(note.body);
+  const [position, setPosition] = useState(note.position);
+  const colors = note.colors;
+  const body = note.body;
   const textAreaRef = useRef(null);
   let mouseStartPos = { x: 0, y: 0 };
   const cardRef = useRef(null);
@@ -40,20 +40,9 @@ const NoteCard = ({ note }) => {
     setPosition(newPosition);
   };
 
-  /*
-  Purpose: Resets the height of the <textarea> to "auto". This removes any previously set height 
-  to ensure that the element can shrink if necessary. By setting it to "auto", the browser 
-  recalculates the height based on the content, as if it had no predefined height.
-*/
-
-  /*
-  scrollHeight: This property gives the height of the content inside the <textarea>, 
-  including content that is not visible due to overflow. By setting the style.height to this value, 
-  the text area will grow (or shrink) to fit all its content without the need for a scrollbar.
-*/
-
   return (
     <div
+      data-testid="note-card"
       ref={cardRef}
       className="card"
       style={{
@@ -88,12 +77,15 @@ NoteCard.propTypes = {
   note: PropTypes.shape({
     body: PropTypes.string.isRequired,
     position: PropTypes.shape({
-      x: PropTypes.number,
-      y: PropTypes.number,
-    }),
+      x: PropTypes.number.isRequired,
+      y: PropTypes.number.isRequired,
+    }).isRequired,
     colors: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      colorHeader: PropTypes.string.isRequired,
       colorBody: PropTypes.string.isRequired,
-    }),
+      colorText: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
 };
 
