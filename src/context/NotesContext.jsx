@@ -2,9 +2,10 @@ import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { db } from "../appwrite/databases";
 import Spinner from "../icons/Spinner";
-export const NotesContext = createContext();
 
-export const NotesProvider = ({ children }) => {
+const NotesContext = createContext();
+
+const NotesProvider = ({ children }) => {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -42,4 +43,4 @@ NotesProvider.propTypes = {
   children: PropTypes.node,
 };
 
-// export default NotesProvider;
+export { NotesProvider, NotesContext };
