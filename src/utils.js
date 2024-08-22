@@ -1,20 +1,16 @@
 export const setNewOffset = (card, mouseMoveDir = { x: 0, y: 0 }) => {
-  // Get the card's dimensions
   const cardWidth = card.offsetWidth;
   const cardHeight = card.offsetHeight;
 
   const offsetLeft = card.offsetLeft - mouseMoveDir.x;
   const offsetTop = card.offsetTop - mouseMoveDir.y;
 
-  // Get the viewport dimensions
   const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight;
 
-  // Calculate the maximum allowable offsets
   const maxOffsetLeft = viewportWidth - cardWidth;
   const maxOffsetTop = viewportHeight - cardHeight;
 
-  // Ensure the card stays within the viewport boundaries
   return {
     x:
       offsetLeft < 0
