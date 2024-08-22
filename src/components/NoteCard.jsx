@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Trash from "../icons/Trash";
+import { setNewOffset } from "../utils";
 
 const NoteCard = ({ note }) => {
   const [position, setPosition] = useState(JSON.parse(note.position));
@@ -41,10 +42,8 @@ const NoteCard = ({ note }) => {
     mouseStartPos.x = e.clientX;
     mouseStartPos.y = e.clientY;
 
-    setPosition({
-      x: cardRef.current.offsetLeft - mouseMoveDir.x,
-      y: cardRef.current.offsetTop - mouseMoveDir.y,
-    });
+    const newPosition = setNewOffset(cardRef.current, mouseMoveDir);
+    setPosition(newPosition);
   };
   /*
   Purpose: Resets the height of the <textarea> to "auto". This removes any previously set height 
