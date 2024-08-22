@@ -3,15 +3,17 @@ import { describe, test, expect } from "vitest";
 import NoteCard from "../../components/NoteCard";
 
 const note = {
-  $id: 2,
-  body: 'Resources:\n- Book: "You Don\'t Know JS: Scope & Closures" by Kyle Simpson.\n\n- Online Course: "JavaScript Patterns" on Udemy.\n\n- Articles:\n"Understanding JavaScript Closures" on Medium.\n\n"Mastering JavaScript Modules" on Dev.to.',
-  colors: {
-    id: "color-blue",
-    colorHeader: "#9BD1DE",
-    colorBody: "#A6DCE9",
+  $id: 3,
+  body: JSON.stringify(
+    'Resources:\n- Book: "You Don\'t Know JS: Scope & Closures" by Kyle Simpson.\n\n- Online Course: "JavaScript Patterns" on Udemy.\n\n- Articles:\n"Understanding JavaScript Closures" on Medium.\n\n"Mastering JavaScript Modules" on Dev.to.'
+  ),
+  colors: JSON.stringify({
+    id: "color-yellow",
+    colorHeader: "#FFEFBE",
+    colorBody: "#FFF5DF",
     colorText: "#18181A",
-  },
-  position: { x: 305, y: 110 },
+  }),
+  position: JSON.stringify({ x: 605, y: 500 }),
 };
 
 describe("NoteCards Component", () => {

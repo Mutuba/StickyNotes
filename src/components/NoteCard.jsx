@@ -1,12 +1,12 @@
 import { useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Trash from "../icons/Trash";
-import { setNewOffset, autoGrow } from "../utils";
+import { setNewOffset, autoGrow, setZIndex } from "../utils";
 
 const NoteCard = ({ note }) => {
-  const [position, setPosition] = useState(note.position);
-  const colors = note.colors;
-  const body = note.body;
+  const [position, setPosition] = useState(JSON.parse(note.position));
+  const colors = JSON.parse(note.colors);
+  const body = JSON.parse(note.body);
   const textAreaRef = useRef(null);
   let mouseStartPos = { x: 0, y: 0 };
   const cardRef = useRef(null);
@@ -16,6 +16,7 @@ const NoteCard = ({ note }) => {
   }, []);
 
   const mouseDown = (e) => {
+    setZIndex(cardRef.current);
     mouseStartPos.x = e.clientX;
     mouseStartPos.y = e.clientY;
     document.addEventListener("mousemove", mouseMove);
@@ -61,6 +62,9 @@ const NoteCard = ({ note }) => {
 
       <div className="card-body">
         <textarea
+          onFocus={() => {
+            setZIndex(cardRef.current);
+          }}
           ref={textAreaRef}
           onInput={() => {
             autoGrow(textAreaRef);
@@ -76,16 +80,8 @@ const NoteCard = ({ note }) => {
 NoteCard.propTypes = {
   note: PropTypes.shape({
     body: PropTypes.string.isRequired,
-    position: PropTypes.shape({
-      x: PropTypes.number.isRequired,
-      y: PropTypes.number.isRequired,
-    }).isRequired,
-    colors: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      colorHeader: PropTypes.string.isRequired,
-      colorBody: PropTypes.string.isRequired,
-      colorText: PropTypes.string.isRequired,
-    }).isRequired,
+    position: PropTypes.string.isRequired,
+    colors: PropTypes.string.isRequired,
   }).isRequired,
 };
 
