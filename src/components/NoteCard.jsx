@@ -45,6 +45,7 @@ const NoteCard = ({ note }) => {
     const newPosition = setNewOffset(cardRef.current, mouseMoveDir);
     setPosition(newPosition);
   };
+
   /*
   Purpose: Resets the height of the <textarea> to "auto". This removes any previously set height 
   to ensure that the element can shrink if necessary. By setting it to "auto", the browser 
