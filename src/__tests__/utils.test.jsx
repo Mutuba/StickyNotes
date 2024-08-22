@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { setNewOffset, autoGrow } from "../utils";
+import { setNewOffset, autoGrow, setZIndex } from "../utils";
 
 describe("setNewOffset", () => {
   test("should return the correct offset within the viewport boundaries", () => {
@@ -75,5 +75,72 @@ describe("autoGrow", () => {
 
     expect(mockTextArea.style.height).toBe("100px");
     expect(mockTextArea.style.height).not.toBe("50px");
+  });
+});
+
+describe("setZIndex", () => {
+  test("should set the z-index of the selected card to 999", () => {
+    const mockCard = {
+      offsetWidth: 100,
+      offsetHeight: 100,
+      offsetLeft: 750,
+      offsetTop: 550,
+      style: { zIndex: 5 },
+    };
+
+    document.body.innerHTML = `
+      <div class="card" style="z-index: 5"></div>
+      <div class="card" style="z-index: 4"></div>
+    `;
+
+    setZIndex(mockCard);
+
+    expect(mockCard.style.zIndex).toBe(999);
+  });
+
+  test("should decrease the z-index of all other cards by 1", () => {
+    const mockCard = {
+      offsetWidth: 100,
+      offsetHeight: 100,
+      offsetLeft: 750,
+      offsetTop: 550,
+      style: { zIndex: 5 },
+    };
+
+    document.body.innerHTML = `
+      <div class="card" id="card1" style="z-index: 5"></div>
+      <div class="card" id="card2" style="z-index: 4"></div>
+      <div class="card" id="card3" style="z-index: 3"></div>
+    `;
+
+    const otherCards = Array.from(document.getElementsByClassName("card"));
+
+    setZIndex(mockCard);
+
+    otherCards.forEach((card) => {
+      if (card !== mockCard) {
+        expect(card.style.zIndex).toBe("998");
+      }
+    });
+  });
+
+  test("should not affect non-card elements", () => {
+    const mockCard = {
+      offsetWidth: 100,
+      offsetHeight: 100,
+      offsetLeft: 750,
+      offsetTop: 550,
+      style: { zIndex: 5 },
+    };
+
+    document.body.innerHTML = `
+      <div class="card" id="card1" style="z-index: 5"></div>
+      <div id="otherElement" style="z-index: 10"></div>
+    `;
+
+    const otherElement = document.getElementById("otherElement");
+
+    setZIndex(mockCard);
+    expect(otherElement.style.zIndex).toBe("10");
   });
 });
