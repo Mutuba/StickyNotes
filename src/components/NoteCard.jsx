@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-// import Trash from "../icons/Trash";
 import DeleteButton from "./DeleteButton";
 import { setNewOffset, autoGrow, setZIndex, bodyParser } from "../utils";
 import { db } from "../appwrite/databases";
@@ -119,13 +118,13 @@ const NoteCard = ({ note, setNotes }) => {
 };
 
 NoteCard.propTypes = {
-  setNotes: PropTypes.func.isRequired,
+  setNotes: PropTypes.func,
   note: PropTypes.shape({
-    $id: PropTypes.string.isRequired,
-    body: PropTypes.string.isRequired,
-    position: PropTypes.string.isRequired,
-    colors: PropTypes.string.isRequired,
-  }).isRequired,
+    $id: PropTypes.string,
+    body: PropTypes.string,
+    position: PropTypes.string,
+    colors: PropTypes.string,
+  }),
 };
 
 export default NoteCard;

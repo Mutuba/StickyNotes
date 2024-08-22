@@ -22,8 +22,8 @@ const Spinner = ({ color = "#fff", size = "20" }) => {
 };
 
 Spinner.propTypes = {
-  color: PropTypes.string.isRequired,
-  size: PropTypes.number.isRequired,
+  color: PropTypes.string,
+  size: PropTypes.string,
 };
 
 export default Spinner;
