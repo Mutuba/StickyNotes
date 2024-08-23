@@ -8,6 +8,7 @@ const NotesContext = createContext();
 const NotesProvider = ({ children }) => {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedNote, setSelectedNote] = useState(null);
 
   useEffect(() => {
     fetchNotes();
@@ -20,7 +21,9 @@ const NotesProvider = ({ children }) => {
   };
 
   return (
-    <NotesContext.Provider value={{ notes, setNotes }}>
+    <NotesContext.Provider
+      value={{ notes, setNotes, selectedNote, setSelectedNote }}
+    >
       {loading ? (
         <div
           style={{

@@ -1,9 +1,10 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useContext } from "react";
 import PropTypes from "prop-types";
 import DeleteButton from "./DeleteButton";
 import { setNewOffset, autoGrow, setZIndex, bodyParser } from "../utils";
 import { db } from "../appwrite/databases";
 import Spinner from "../icons/Spinner";
+import { NotesContext } from "../context/NotesContext";
 
 const NoteCard = ({ note }) => {
   const [saving, setSaving] = useState(false);
@@ -15,6 +16,7 @@ const NoteCard = ({ note }) => {
   let mouseStartPos = { x: 0, y: 0 };
   const cardRef = useRef(null);
   const keyUpTimer = useRef(null);
+  const { setSelectedNote } = useContext(NotesContext);
 
   const handleKeyUp = async () => {
     setSaving(true);
@@ -35,6 +37,8 @@ const NoteCard = ({ note }) => {
 
   const mouseDown = (e) => {
     if (e.target.className === "card-header") {
+      setSelectedNote(note);
+
       setZIndex(cardRef.current);
       mouseStartPos.x = e.clientX;
       mouseStartPos.y = e.clientY;
@@ -105,6 +109,7 @@ const NoteCard = ({ note }) => {
           onKeyUp={handleKeyUp}
           onFocus={() => {
             setZIndex(cardRef.current);
+            setSelectedNote(note);
           }}
           ref={textAreaRef}
           onInput={() => {
