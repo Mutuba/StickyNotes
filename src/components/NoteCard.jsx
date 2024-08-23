@@ -1,5 +1,7 @@
 import { useRef, useEffect, useState, useContext } from "react";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import DeleteButton from "./DeleteButton";
 import { setNewOffset, autoGrow, setZIndex, bodyParser } from "../utils";
 import { db } from "../appwrite/databases";
@@ -8,7 +10,6 @@ import { NotesContext } from "../context/NotesContext";
 
 const NoteCard = ({ note }) => {
   const [saving, setSaving] = useState(false);
-
   const [position, setPosition] = useState(JSON.parse(note.position));
   const colors = JSON.parse(note.colors);
   const body = bodyParser(note.body);
@@ -52,7 +53,11 @@ const NoteCard = ({ note }) => {
     try {
       await db.notes.update(note.$id, payload);
     } catch (error) {
-      console.error(error);
+      const toastId = "save-note-error";
+      toast.dismiss(toastId);
+      toast.error("An error occured while saving note", {
+        toastId,
+      });
     }
     setSaving(false);
   };
