@@ -1,3 +1,15 @@
+/*
+  Purpose: Resets the height of the <textarea> to "auto". This removes any previously set height 
+  to ensure that the element can shrink if necessary. By setting it to "auto", the browser 
+  recalculates the height based on the content, as if it had no predefined height.
+*/
+
+/*
+  scrollHeight: This property gives the height of the content inside the <textarea>, 
+  including content that is not visible due to overflow. By setting the style.height to this value, 
+  the text area will grow (or shrink) to fit all its content without the need for a scrollbar.
+*/
+
 export const setNewOffset = (card, mouseMoveDir = { x: 0, y: 0 }) => {
   const cardWidth = card.offsetWidth;
   const cardHeight = card.offsetHeight;
